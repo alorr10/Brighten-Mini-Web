@@ -14,7 +14,7 @@ class Main extends Component {
             return (
               <View style={styles.listContainer}>
                 {data.allUsers.map(user => (
-                  <View style={styles.link}>
+                  <View style={styles.link} key={user.id}>
                     <Link to={`/${user.id}`}>{user.name}</Link>
                   </View>
                 ))}

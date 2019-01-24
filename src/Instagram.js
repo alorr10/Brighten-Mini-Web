@@ -3,11 +3,15 @@ import { View, Text, StyleSheet } from 'react-native';
 import InstagramLogin from 'react-instagram-login';
 import fetchJsonp from 'fetch-jsonp';
 class Instagram extends Component {
+  state = {
+    name: '',
+  };
   responseInstagram = async response => {
     console.log(response);
     const r = await fetchJsonp(`https://api.instagram.com/v1/users/self/?access_token=${response}`);
     const json = await r.json();
     console.log(json);
+    this.setState({ name: json.data.full_name });
   };
 
   onFailure = r => {
@@ -16,14 +20,16 @@ class Instagram extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text> Instagram </Text>
-        <InstagramLogin
-          clientId="db56e3d402ef4c83b8c701dd16e5a4c5"
-          buttonText="Login"
-          onSuccess={this.responseInstagram}
-          onFailure={this.onFailure}
-          implicitAuth
-        />
+        {!this.state.name && (
+          <InstagramLogin
+            clientId="db56e3d402ef4c83b8c701dd16e5a4c5"
+            buttonText="Login"
+            onSuccess={this.responseInstagram}
+            onFailure={this.onFailure}
+            implicitAuth
+          />
+        )}
+        <Text>{this.state.name}</Text>
       </View>
     );
   }

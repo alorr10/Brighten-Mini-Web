@@ -10,7 +10,7 @@ import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const client = new ApolloClient({
-  uri: 'https://api.graph.cool/simple/v1/cjab9uyc90ygx0152knu3ae4u',
+  uri: 'https://api.graph.cool/simple/v1/BrightenMini',
   cache: new InMemoryCache(),
 });
 

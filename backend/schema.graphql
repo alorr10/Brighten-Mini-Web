@@ -1,0 +1,30 @@
+type Query {
+  allBrightens: [Brighten!]!
+  # brighten(brightenId: ID!): Brighten
+  # brightensByUser(userId: ID!): [Brighten!]!
+  allUsers: [User!]!
+}
+
+type Mutation {
+  createUser(name: String!, instagram: String, email: String): User
+  deleteUser(id: ID!): User
+  # createBrighten(text: String!, senderId: ID!, receiverId: ID!): Brighten
+  # reveal(brightenId: ID!): Brighten
+}
+
+type User {
+  id: ID!
+  name: String!
+  instagram: String
+  email: String
+  sentBrightens: [Brighten!]!
+  receivedBrightens: [Brighten!]!
+}
+
+type Brighten {
+  id: ID!
+  text: String!
+  sender: User!
+  receiver: User!
+  revealed: Boolean!
+}

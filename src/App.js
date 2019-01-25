@@ -21,7 +21,6 @@ class App extends Component {
   submit = sendBrighten => {
     sendBrighten({
       variables: {
-        senderId: 'cjbdwzl2e489i0130se4gkcrd',
         receiverId: this.props.match.params.id,
         text: this.state.customText,
       },
@@ -36,7 +35,7 @@ class App extends Component {
         <Query query={userQuery} variables={{ id: this.props.match.params.id }}>
           {({ loading, error, data }) => {
             if (loading) return <p>Loading...</p>;
-            if (error) return <p>Error :(</p>;
+            if (error) return <p>Error :({console.log(error)}</p>;
             if (data.User === null) return <p>No user found :(</p>;
             return (
               <View style={styles.innerContainer}>
@@ -109,24 +108,9 @@ const userQuery = gql`
 `;
 
 const sendBrighten = gql`
-  mutation createBrightenWithCustomCompliment($senderId: ID!, $receiverId: ID!, $text: String!) {
-    createBrighten(
-      senderId: $senderId
-      receiverId: $receiverId
-      isReply: false
-      compliment: { text: $text, creatorId: $senderId, category: CUSTOM }
-    ) {
+  mutation createBrightenWithCustomCompliment($receiverId: ID!, $text: String!) {
+    createBrighten(senderId: "cjrbg8pvx0nr90179z0az01e6", receiverId: $receiverId, text: $text) {
       id
-      sender {
-        id
-        name
-      }
-      receiver {
-        id
-        name
-        phoneNumber
-        isClaimed
-      }
     }
   }
 `;

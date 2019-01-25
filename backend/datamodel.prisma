@@ -1,0 +1,18 @@
+type User {
+  id: ID! @unique
+  createdAt: DateTime!
+  name: String!
+  instagram: String @unique
+  email: String @unique
+  sentBrightens: [Brighten!]! @relation(name: "BrightenSender")
+  receivedBrightens: [Brighten!]! @relation(name: "BrightenReceiver")
+}
+
+type Brighten {
+  id: ID! @unique
+  createdAt: DateTime!
+  text: String!
+  sender: User! @relation(name: "BrightenSender")
+  receiver: User! @relation(name: "BrightenReceiver")
+  revealed: Boolean! @default(value: "false")
+}

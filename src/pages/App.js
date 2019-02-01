@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, Button } from 'react-native-web';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 class App extends Component {
   constructor(props) {
@@ -14,6 +18,12 @@ class App extends Component {
     this.inp_key = React.createRef();
   }
 
+  componentDidMount() {
+    // if (!this.props.id) {
+    //   this.props.history.push('/login');
+    // }
+  }
+
   handleChangeText = customText => {
     this.setState({ customText });
   };
@@ -23,6 +33,7 @@ class App extends Component {
       variables: {
         receiverId: this.props.match.params.id,
         text: this.state.customText,
+        senderId: this.props.id,
       },
     });
     this.setState({ customText: '' });
@@ -30,8 +41,19 @@ class App extends Component {
 
   render() {
     const { placeholder, customText } = this.state;
+    const { id } = this.props;
+    if (!id) {
+      return (
+        <View style={styles.container}>
+          <Header />
+          <Text> Please Sign In to Send a message </Text>
+          <Link to={'./login'}>Sign In</Link>
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
+        <Header />
         <Query query={userQuery} variables={{ id: this.props.match.params.id }}>
           {({ loading, error, data }) => {
             if (loading) return <p>Loading...</p>;
@@ -108,10 +130,26 @@ const userQuery = gql`
 `;
 
 const sendBrighten = gql`
-  mutation createBrightenWithCustomCompliment($receiverId: ID!, $text: String!) {
-    createBrighten(senderId: "cjrbg8pvx0nr90179z0az01e6", receiverId: $receiverId, text: $text) {
+  mutation createBrightenWithCustomCompliment($receiverId: ID!, $text: String!, $senderId: ID!) {
+    createBrighten(senderId: $senderId, receiverId: $receiverId, text: $text) {
       id
     }
   }
 `;
-export default App;
+
+const mapStateToProps = state => {
+  return {
+    id: state.users.id,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+const AppWithRouter = withRouter(App);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppWithRouter);

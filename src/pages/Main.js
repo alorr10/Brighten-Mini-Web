@@ -3,10 +3,12 @@ import { View, Text, StyleSheet } from 'react-native-web';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 class Main extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Header />
         <Query query={allUsersQuery}>
           {({ data, loading, error }) => {
             if (loading) return <p>Loading...</p>;
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 5,
+    padding: 20,
   },
   listContainer: {
     flexDirection: 'row',

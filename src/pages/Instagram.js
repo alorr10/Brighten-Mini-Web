@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 import fetchJsonp from 'fetch-jsonp';
 import { createUser } from '../actions';
 import Header from '../components/Header';
+import { withRouter } from 'react-router-dom';
+
 class Instagram extends Component {
   state = {
     name: '',
   };
+
   responseInstagram = async response => {
     console.log(response);
     const r = await fetchJsonp(`https://api.instagram.com/v1/users/self/?access_token=${response}`);
@@ -17,7 +20,7 @@ class Instagram extends Component {
     } = await r.json();
     console.log(full_name, id, profile_picture, username);
     this.props.createUser({ full_name, id, profile_picture, username });
-    this.setState({ name: full_name });
+    this.props.history.push('/');
   };
 
   onFailure = r => {
@@ -26,7 +29,6 @@ class Instagram extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header />
         {!this.state.name && (
           <InstagramLogin
             clientId="db56e3d402ef4c83b8c701dd16e5a4c5"
@@ -64,6 +66,8 @@ const mapDispatchToProps = dispatch => {
     },
   };
 };
+
+const InstagramWithRouter = withRouter(Instagram);
 
 export default connect(
   mapStateToProps,

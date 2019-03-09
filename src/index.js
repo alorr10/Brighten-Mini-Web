@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './store';
 import { Provider } from 'react-redux';
+import ThemeSwitcher from './pages/ThemeSwitcher';
+import Header from './components/Header';
 export const client = new ApolloClient({
   uri: 'https://api.graph.cool/simple/v1/BrightenMini',
   cache: new InMemoryCache(),
@@ -21,9 +23,11 @@ const AppWithApollo = () => (
     <PersistGate loading={null} persistor={persistor}>
       <Router>
         <ApolloProvider client={client}>
+          <Header />
           <Route exact path="/" component={Main} />
           <Route path="/login" component={Instagram} />
-          <Route path="/:id" component={App} />
+          <Route path="/users/:id" component={App} />
+          <Route path="/bootstrap" component={ThemeSwitcher} />
         </ApolloProvider>
       </Router>
     </PersistGate>

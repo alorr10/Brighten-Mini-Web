@@ -3,12 +3,28 @@ import { View, Text, StyleSheet } from 'react-native-web';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
+import { connect } from 'react-redux';
+import { clearSearchUsers } from '../actions';
+
 class Main extends Component {
+  componentWillUnmount() {
+    this.props.clearSearchUsers();
+  }
   render() {
+    const { searchUsers } = this.props;
+    if (searchUsers && searchUsers.length) {
+      return (
+        <View style={styles.listContainer}>
+          {searchUsers.map(user => (
+            <View style={styles.link} key={user.id}>
+              <Link to={`/users/${user.id}`}>{user.name}</Link>
+            </View>
+          ))}
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
-        <Header />
         <Query query={allUsersQuery}>
           {({ data, loading, error }) => {
             if (loading) return <p>Loading...</p>;
@@ -17,7 +33,7 @@ class Main extends Component {
               <View style={styles.listContainer}>
                 {data.allUsers.map(user => (
                   <View style={styles.link} key={user.id}>
-                    <Link to={`/${user.id}`}>{user.name}</Link>
+                    <Link to={`/users/${user.id}`}>{user.name}</Link>
                   </View>
                 ))}
               </View>
@@ -54,5 +70,23 @@ const allUsersQuery = gql`
     }
   }
 `;
+const mapStateToProps = state => {
+  return {
+    searchUsers: state.users.searchUsers,
+  };
+};
 
-export default Main;
+const mapDispatchToProps = dispatch => {
+  return {
+    clearSearchUsers: () => {
+      dispatch(clearSearchUsers());
+    },
+    //   search: text => {
+    //     dispatch(search(text));
+    //   },
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Main);

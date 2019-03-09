@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, Button } from 'react-native-web';
+import { View, Text, StyleSheet, Image, TextInput } from 'react-native-web';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-
-class App extends Component {
+import Button from 'react-bootstrap/Button';
+class User extends Component {
   constructor(props) {
     super(props);
 
@@ -45,15 +45,13 @@ class App extends Component {
     if (!id) {
       return (
         <View style={styles.container}>
-          <Header />
           <Text> Please Sign In to Send a message </Text>
-          <Link to={'./login'}>Sign In</Link>
+          <Link to={'../login'}>Sign In</Link>
         </View>
       );
     }
     return (
       <View style={styles.container}>
-        <Header />
         <Query query={userQuery} variables={{ id: this.props.match.params.id }}>
           {({ loading, error, data }) => {
             if (loading) return <p>Loading...</p>;
@@ -75,7 +73,13 @@ class App extends Component {
                         value={customText}
                         onChangeText={this.handleChangeText}
                       />
-                      <Button onPress={() => this.submit(sendBrighten)} title="Submit" />
+                      <Button
+                        variant="primary"
+                        onClick={() => this.submit(sendBrighten)}
+                        title="Submit"
+                      >
+                        Send
+                      </Button>
                     </View>
                   )}
                 </Mutation>
@@ -147,9 +151,9 @@ const mapDispatchToProps = dispatch => {
   return {};
 };
 
-const AppWithRouter = withRouter(App);
+const UserWithRouter = withRouter(User);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AppWithRouter);
+)(UserWithRouter);

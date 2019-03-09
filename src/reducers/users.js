@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   email: '',
   instagram: '',
   receivedBrightens: [],
+  searchUsers: [],
 };
 
 const users = (state = INITIAL_STATE, action) => {
@@ -27,6 +28,18 @@ const users = (state = INITIAL_STATE, action) => {
         id: action.payload.id,
         name: action.payload.name,
         instagram: action.payload.instagram,
+      };
+
+    case 'SEARCH_FULFILLED':
+      return {
+        ...state,
+        searchUsers: action.payload,
+      };
+
+    case 'CLEAR_SEARCH_USERS':
+      return {
+        ...state,
+        searchUsers: [],
       };
 
     case 'LOGOUT':
